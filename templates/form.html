@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Visa Approval Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff; /* Light sky blue color */
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        p.instruction {
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .form-field {
+            flex: 1 1 calc(50% - 20px); /* Two columns */
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .back-button a {
+            text-decoration: none;
+            background-color: #007BFF;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .back-button a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-button">
+            <a href="/">← Back to Home</a>
+        </div>
+        <h1>US Visa Approval Form</h1>
+        <p class="instruction">Please fill in all the required information accurately to get your visa approval prediction.</p>
+        <form action="/predict" method="POST">
+            <div class="form-group">
+                <div class="form-field">
+                    <label for="continent">Continent</label>
+                    <select id="continent" name="continent" required>
+                        <option value="">Select Continent</option>
+                        <option value="Asia">Asia</option>
+                        <option value="Europe">Europe</option>
+                        <option value="Africa">Africa</option>
+                        <option value="North America">North America</option>
+                        <option value="South America">South America</option>
+                        <option value="Oceania">Oceania</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="education_level">Education Level</label>
+                    <select id="education_level" name="education_level" required>
+                        <option value="">Select Education Level</option>
+                        <option value="High School">High School</option>
+                        <option value="Bachelor's">Bachelor's</option>
+                        <option value="Master's">Master's</option>
+                        <option value="Doctorate">Doctorate</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="job_experience">Has Job Experience</label>
+                    <select id="job_experience" name="job_experience" required>
+                        <option value="">Select Has Job Experience</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="job_training">Requires Job Training</label>
+                    <select id="job_training" name="job_training" required>
+                        <option value="">Select Requires Job Training</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="employees">Number of Employees (15000 - 40000)</label>
+                    <input type="number" id="employees" name="employees" placeholder="Enter a number between 15000 and 40000" required>
+                </div>
+                <div class="form-field">
+                    <label for="region">Region of Employment</label>
+                    <select id="region" name="region" required>
+                        <option value="" disabled selected>Select Region</option>
+                        <option>West</option>
+                        <option>Northeast</option>
+                        <option>South</option>
+                        <option>Midwest</option>
+                        <option>Island</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="wage">Prevailing Wage (700 - 7000)</label>
+                    <input type="number" id="wage" name="wage" placeholder="Enter a wage between 700 and 7000" required>
+                </div>
+                <div class="form-field">
+                    <label for="tenure">Contract Tenure</label>
+                    <select id="tenure" name="tenure" required>
+                        <option value="">Select Contract Tenure</option>
+                        <option>Hour</option>
+                        <option>Year</option>
+                        <option>Week</option>
+                        <option>Month</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="position">Full Time Position</label>
+                    <select id="position" name="position" required>
+                        <option value="">Select Full Time Position</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="company_age">Company Age (15 - 180)</label>
+                    <input type="number" id="company_age" name="company_age" placeholder="Enter an age between 15 and 180" required>
+                </div>
+            </div>
+            <button type="submit">Get My Visa Prediction</button>
+        </form>
+    </div>
+</body>
+</html>

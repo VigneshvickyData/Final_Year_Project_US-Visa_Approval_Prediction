@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Visa Approval Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .hero-section {
+            background: url('https://c.wallhere.com/photos/f6/1c/ottawa_ontario_canada_ottawamcdonaldcartierairport_ottawainternationalairport_ottawaairport_yow_cyow-709282.jpg!d') no-repeat center center/cover;
+            height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* Dark overlay for better contrast */
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            margin: 0;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+
+        .hero-section .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .hero-section button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #007BFF;
+            border: 1px solid #007BFF;
+        }
+
+        .btn-secondary:hover {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        /* Positioning buttons to the right */
+        .account-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+
+        .account-buttons button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-home {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-home:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-login {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-login:hover {
+            background-color: #1e7e34;
+        }
+
+        .btn-account {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-account:hover {
+            background-color: #117a8b;
+        }
+
+        .features-section {
+            padding: 50px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        .features-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .features-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .feature-card {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            text-align: center;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Improved form design */
+        .modal form {
+            display: flex;
+            flex-direction: column;
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal input {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            background-color: #fff;
+        }
+
+        .modal button {
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal button:hover {
+            background-color: #0056b3;
+        }
+
+        .steps-section {
+            padding: 50px;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+
+        .steps-section h3 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .steps-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .step-card {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            text-align: center;
+        }
+
+        /* Account Page Styling */
+        .account-details {
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+
+        .account-details h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .account-details p {
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <section class="hero-section">
+        <h1>US Visa Approval Prediction</h1>
+        <p>Leverage the power of machine learning to predict your US visa application outcome using our advanced K-Nearest Neighbors algorithm.</p>
+        <div class="buttons">
+            <a href="/usvisa">
+                <button class="btn-primary">Go to Visa Form</button>
+            </a>
+            <button class="btn-secondary" onclick="scrollToFeatures()">Learn More</button>
+        </div>
+    </section>
+
+    <section class="features-section" id="features">
+        <h2>About Our Prediction Model</h2>
+        <p> Discover how our advanced prediction system can help with your visa application</p>
+        <div class="features-container">
+            <div class="feature-card">
+                <h3>Advanced ML Model</h3>
+                <p>Utilizing K-Nearest Neighbors (KNN) algorithm for accurate visa approval predictions.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Historical Data Analysis</h3>
+                <p>Predictions based on comprehensive historical visa application data.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Instant Results</h3>
+                <p>Get immediate predictions and recommendations for your visa application.</p>
+            </div>
+            <div class="feature-card">
+                <h3>User-Friendly</h3>
+                <p>Simple and intuitive interface designed for easy navigation and understanding.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="steps-section">
+        <h3>How to use this application</h3>
+        <div class="steps-container">
+            <div class="step-card">
+                <h4>Step 1: Create Account</h4>
+                <p>Sign up using your email or phone number to get started.</p>
+            </div>
+            <div class="step-card">
+                <h4>Step 2: Enter Details</h4>
+                <p>Provide your visa application details and requirements.</p>
+            </div>
+            <div class="step-card">
+                <h4>Step 3: Get Prediction</h4>
+                <p>Receive instant prediction results and recommendations.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="account-buttons">
+        <button class="btn-login" onclick="openLoginModal()">Login</button>
+        <button class="btn-account" onclick="openAccountDetails()">
+            <img src="https://img.icons8.com/?size=100&id=pETkiIKt6qBf&format=png&color=000000" 
+                 alt="Account Logo" 
+                 style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;">
+            Account
+        </button>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login</h2>
+            <form onsubmit="saveUserDetails(event)">
+                <input type="text" id="login-name" placeholder="Full Name" required><br><br>
+                <input type="email" id="login-email" placeholder="Email" required><br><br>
+                <input type="tel" id="login-phone" placeholder="Phone Number" required><br><br>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Account Details Modal -->
+    <div id="accountModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('accountModal')">&times;</span>
+            <h2>Account Details</h2>
+            <div class="account-details">
+                <p id="account-name"></p>
+                <p id="account-email"></p>
+                <p id="account-phone"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userDetails = {};
+
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function saveUserDetails(event) {
+            event.preventDefault();
+            userDetails.name = document.getElementById('login-name').value;
+            userDetails.email = document.getElementById('login-email').value;
+            userDetails.phone = document.getElementById('login-phone').value;
+            alert("Login successful!");
+
+            // After saving the details, close the login modal
+            closeModal('loginModal');
+        }
+
+        function scrollToFeatures() {
+            document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openAccountDetails() {
+            if (userDetails.name) {
+                document.getElementById('account-name').innerText = "Name: " + userDetails.name;
+                document.getElementById('account-email').innerText = "Email: " + userDetails.email;
+                document.getElementById('account-phone').innerText = "Phone: " + userDetails.phone;
+            } 
+            else {
+                alert("Please log in first!");
+                return;
+            }
+            document.getElementById('accountModal').style.display = 'block';
+        }
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+

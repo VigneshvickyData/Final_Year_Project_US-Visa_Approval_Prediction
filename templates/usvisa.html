@@ -4,130 +4,321 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>US Visa Prediction</title>
-    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css')}}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+      crossorigin="anonymous"
+     />
+      <style>
+        body {
+          background-image: url('https://images.unsplash.com/photo-1503221043305-f7498f8b7888');
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-attachment: fixed;
+        }
+        .form-container {
+          background-color: #ffffff;
+          border-radius: 8px;
+          padding: 20px;
+          max-width: 600px;
+          margin: auto;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .form-container legend {
+          font-size: 1.25rem;
+          font-weight: bold;
+          color: #333333;
+          text-align: center;
+          margin-bottom: 15px;
+        }
+        .status-container {
+          background-color: #ffffff;
+          border: 1px solid #dddddd;
+          border-radius: 8px;
+          padding: 20px;
+          margin: 20px auto;
+          max-width: 600px;
+          text-align: center;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .horizontal-section {
+          display: flex;
+          justify-content: space-between;
+          gap: 2%;
+          margin-top: 20px;
+        }
+        .card {
+          flex: 1;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          border: none;
+        }
+        .approved-card {
+          background: linear-gradient(135deg, #d4edda, #b7e4c7);
+          color: #155724;
+        }
+        .not-approved-card {
+          background: linear-gradient(135deg, #f8d7da, #f5b7b1);
+          color: #721c24;
+        }
+        .card h3 {
+          font-size: 1.5rem;
+          margin-bottom: 10px;
+        }
+        .card p {
+          font-size: 1rem;
+          margin-bottom: 10px;
+        }
+        .card ul {
+          list-style: disc;
+          padding-left: 20px;
+        }
+        /* Updated styles for larger frame sizes */
+        .result-container {
+          display: flex;
+          justify-content: space-between;
+          gap: 20px;
+          align-items: stretch;
+          margin-top: 30px;
+        }
+        .result-card {
+          flex: 1;
+          padding: 30px;
+          border-radius: 12px;
+          box-sizing: border-box;
+          min-height: 400px;
+        }
+        .visa-approved {
+          background-color: #d4edda;
+          border: 1px solid #c3e6cb;
+        }
+        .visa-not-approved {
+          background-color: #f8d7da;
+          border: 1px solid #f5c6cb;
+        }
+        .result-card h4 {
+          text-align: center;
+          font-size: 1.75rem;
+          margin-bottom: 20px;
+        }
+      </style>
   </head>
   <body>
-    <nav class="navbar navbar-light bg-light static-top">
+    <div class="container">
+      <div class="back-button">
+        <a href="/" class="btn btn-primary">&larr; Back to Home</a>
+      </div>
+      <section>
         <div class="container-fluid">
-           <!-- <a class="navbar-brand" href="https://ineuron.ai"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIkAAAAlCAMAAABBJDpuAAAAVFBMVEX/fgD/iQA7NzIyMjMnNYInNYEnNYInNYEzMzInNYQnNYETJzsnNYIwN1wxMjNoTis4O1YrNm0xOF47PE9DP0dEQEVpTVkAJJ4nNYEOLJHJbiAzMzOmmmHRAAAAFnRSTlOh/vu+986oen9fP2UqEzQkFAIDAAEEILVBJQAAA3FJREFUWMPNmO2WoyAMQG0VBARtdVRs3/89NwkgaF1rd2aOm18tIrnkgwSz7n+R7LcV1ELkeS7E7VySRlyfQXJhTiO55c+liP4cEuH1X8E7gaV+S3Jv2zYZ/Vr+/Sdx2vP6doc/fSPcf/GOpLSFVXFUW8t+giRP47TOd60yk1hbxIhSP0ACKPWrvw7YBIT/lcQY84G3Wk17ugWQfg5UsQJpjflKSLQi7xTWyk0SXTJ4VnB5D1yccxmp4Z+mX5KGNS+SPXVNll0ulyxL0wYmloBB6zL/MpCoAgjAJiUM6w0SboMwPUdRogvNKcNM3smFdRvEcJJkKcflQa+X0pNIfBGW0zKqjyQtw4VLKQlI7ZLgdrRNSZDjMQx2GB4pCkxkCrfGWUTJ0Egan6muCHgJCUwtnCk0mrJ9Q8K5LUqtdSfynkAedhynaRqngVDaXLiJEAzkFkM71IuIlWRYtSQpbXSZDvQ7JPCei9brs+oaABkn74LRIkpFaVxGnzjvIxTYREOoEwn5r01JTDRTcO87Eu3zNUeTPKZpjrIRrNIDCjzALbPk7LJMIokOEQu2K7yKQAKvFDF9pVe0R+LGb7h1MMkw2ijjA/1zhSfSphvEAChXJEhAqwYStIJWXnTpvbdH4hTUwSQ2JRmQpILDLYbB7J41SYiLcNozu5Z3JMo7RxBJahI7WSRByCMkqJt9hySESbVJcvmARJGFExJmdBSl2oM2+T4JLWfgaGFptizlPUm1FydHSdyZ7UnS4ySph2kS0kJrkvr5NJg7dnrJnfxgxPozRPGtkyPNOxtaiDvbIAF9L+5B5zTI2BwlwXmM+U3zReav3o0F8oUEFFZ42McDZYomOUziFmezgWyo251Uc1nyKJol7URCEvIYUEbHYaEGQi9C9egwCdVfHwiaajfjKMUcHcRacCylhWJbJDfq47EEDhYqoIWjHnwDXZPpPiChPQelLU+Cbm4w50FmYgkvFwpiWwCC/Um/SLcNElOC9RVj6qWpCiEMvRUK4zLpdKmPw8rVldy/qxjn60wLrVLWJIPLiZJRr3fsvnOHPvare+lB93tb37T20D82jqOt+zNuXhuNvNhp7X+PpHb3rvV9R5xjE2SpyCN9ffQO+GtWIZr5Xnytz4gTMIRYfys47/uJEXny/aQ/95tSUwmU+uRvSp/IHzQqZYpYrQmxAAAAAElFTkSuQmCC" /></a> -->
-        </div>
-     </nav>
-    <section>
-        <div class="container-fluid">
-            <div class="container">
-                <form action="/" method="post">
-                    <legend>US Visa approval Form</legend>
-                    <div class="mb-3">
-                        <label for="continent" >continent</label>
-                        <select class="form-control" id="continent" name="continent" placeholder="Continent" required="required">
-                          <option value="" disabled selected>Select Continent</option>
-                          <option>Asia</option>
-                          <option>Africa</option>
-                          <option>North America</option>
-                          <option>Europe</option>
-                          <option>South America</option>
-                          <option>Oceania</option>
-                        </select>
-                      </div>
-        
-                      <div class="mb-3">
-                        <label for="education_of_employee">Education of employee</label>
-                        <select class="form-control" id="education_of_employee" name="education_of_employee" placeholder="Education" required="required">
-                            <option value="" disabled selected>Select Education</option>
-                            <option>High School</option>
-                            <option>Master's</option>
-                            <option>Bachelor's</option>
-                            <option>Doctorate</option>
-                        </select>
-                      </div>
-        
-                      <div class="mb-3">
-                        <label for="has_job_experience">Has Job Experience</label>
-                        <select class="form-control" id="has_job_experience" name="has_job_experience" placeholder="Has Experience" required="required">
-                            <option value="" disabled selected>Has Experience</option>
-                            <option>N</option>
-                            <option>Y</option>
-                        </select>
-                      </div>
-        
-                      <div class="mb-3">
-                        <label for="requires_job_training">Requires Job Training</label>
-                        <select class="form-control" id="requires_job_training" name="requires_job_training" placeholder="Training required" required="required">
-                            <option value="" disabled selected>Required Training</option>
-                            <option>N</option>
-                            <option>Y</option>
-                        </select>
-                      </div>
-        
-                      <div class="mb-3">
-                        <label for="no_of_employees">Number of Employees</label>
-                        <input type="number" class="form-control" id="no_of_employees" name="no_of_employees" min="14500" max="40000" placeholder="select between 15000 to 40000" required="required">
-                      </div>
-                      
-                      <div class="mb-3">
-                        <label for="region_of_employment">Select Region</label>
-                        <select class="form-control" id="region_of_employment" name="region_of_employment" placeholder="Region" required="required">
-                          <option value="" disabled selected>Region</option>
-                          <option>West</option>
-                          <option>Northeast</option>
-                          <option>South</option>
-                          <option>Midwest</option>
-                          <option>Island</option>
-                        </select>
-                      </div>
-        
-                      <div class="mb-3">
-                        <label for="prevailing_wage">Prevailing Wage</label>
-                        <input type="number" class="form-control" id="prevailing_wage" name="prevailing_wage" min="600" max="70000" placeholder="select between 700 to 7000" required="required">
-                      </div>
+          <div class="form-container">
+            <form action="/" method="post">
+              <legend>US Visa Approval Form</legend>
+              <p class="instruction">"Fill in the required details accurately to get your visa approval prediction."</p>
+              <div class="mb-3">
+                <label for="continent" class="form-label">Continent</label>
+                <select
+                  class="form-control"
+                  id="continent"
+                  name="continent"
+                  required
+                >
+                  <option value="" disabled selected>Select Continent</option>
+                  <option>Asia</option>
+                  <option>Africa</option>
+                  <option>North America</option>
+                  <option>Europe</option>
+                  <option>South America</option>
+                  <option>Oceania</option>
+                </select>
+              </div>
 
+              <div class="mb-3">
+                <label for="education_of_employee" class="form-label">Education of Employee</label>
+                <select
+                  class="form-control"
+                  id="education_of_employee"
+                  name="education_of_employee"
+                  required
+                >
+                  <option value="" disabled selected>Select Education</option>
+                  <option>High School</option>
+                  <option>Master's</option>
+                  <option>Bachelor's</option>
+                  <option>Doctorate</option>
+                </select>
+              </div>
 
-        
-                      <div class="mb-3">
-                        <label for="unit_of_wage">Contract Tenure</label>
-                        <select class="form-control" id="unit_of_wage" name="unit_of_wage" placeholder="Contract tenure" required="required">
-                            <option value="" disabled selected>Contract Tenure</option>
-                            <option>Hour</option>
-                            <option>Year</option>
-                            <option>Week</option>
-                            <option>Month</option>
-                        </select>
-                      </div>
-        
-                      <div class="mb-3">
-                        <label for="full_time_position">Full or Part Time</label>
-                        <select class="form-control" id="full_time_position" name="full_time_position" placeholder="Full Time" required="required">
-                            <option value="" disabled selected>Full Time</option>
-                            <option>Y</option>
-                            <option>N</option>
-                        </select>
-                      </div>
-        
-                      <div class="mb-3">
-                        <label for="company_age">Age of the company</label>
-                        <input type="number" class="form-control" id="company_age" name="company_age" min="15" max="180" placeholder="select between 10 to 180" required="required">
-                      </div>
-        
-                        <input class="btn btn-primary" type="submit" value="Predict Visa-Status" required />
-                    </div>
-                    
-                </form>
-            </div>
-            <div class="text-center text-black">
-                <h2 class="display-4 fw-bolder">Visa Prediction Status: {{context}} </h2>
-            </div>
+              <div class="mb-3">
+                <label for="has_job_experience" class="form-label">Has Job Experience</label>
+                <select
+                  class="form-control"
+                  id="has_job_experience"
+                  name="has_job_experience"
+                  required
+                >
+                  <option value="" disabled selected>Has Experience</option>
+                  <option>N</option>
+                  <option>Y</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="requires_job_training" class="form-label">Requires Job Training</label>
+                <select
+                  class="form-control"
+                  id="requires_job_training"
+                  name="requires_job_training"
+                  required
+                >
+                  <option value="" disabled selected>Required Training</option>
+                  <option>N</option>
+                  <option>Y</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="no_of_employees" class="form-label">Number of Employees</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="no_of_employees"
+                  name="no_of_employees"
+                  min="14500"
+                  max="40000"
+                  placeholder="Select between 15000 to 40000"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="region_of_employment" class="form-label">Select Region</label>
+                <select
+                  class="form-control"
+                  id="region_of_employment"
+                  name="region_of_employment"
+                  required
+                >
+                  <option value="" disabled selected>Region</option>
+                  <option>West</option>
+                  <option>Northeast</option>
+                  <option>South</option>
+                  <option>Midwest</option>
+                  <option>Island</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="prevailing_wage" class="form-label">Prevailing Wage</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="prevailing_wage"
+                  name="prevailing_wage"
+                  min="600"
+                  max="70000"
+                  placeholder="Select between 700 to 7000"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="unit_of_wage" class="form-label">Contract Tenure</label>
+                <select
+                  class="form-control"
+                  id="unit_of_wage"
+                  name="unit_of_wage"
+                  required
+                >
+                  <option value="" disabled selected>Contract Tenure</option>
+                  <option>Hour</option>
+                  <option>Year</option>
+                  <option>Week</option>
+                  <option>Month</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="full_time_position" class="form-label">Full or Part Time</label>
+                <select
+                  class="form-control"
+                  id="full_time_position"
+                  name="full_time_position"
+                  required
+                >
+                  <option value="" disabled selected>Full Time</option>
+                  <option>Y</option>
+                  <option>N</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="company_age" class="form-label">Age of the Company</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="company_age"
+                  name="company_age"
+                  min="15"
+                  max="180"
+                  placeholder="Select between 10 to 180"
+                  required
+                />
+              </div>
+
+              <input
+                class="btn btn-primary w-100"
+                type="submit"
+                value="Predict Visa-Status"
+              />
+            </form>
+          </div>
+
+          <!-- Visa Prediction Status Section -->
+        <div class="status-container">
+          <h2>Visa Prediction Status: <span style="color: #007bff;">{{context}}</span></h2>
+          <div style="font-size: 1.25rem; color: #555555; padding: 20px; background-color: #ffffff; border-radius: 8px; border: 1px solid #dddddd;">
+            <p style="margin: 10px 0; font-weight: 600;"> You can see your prediction result details in "About Your Visa Application Result" section</p>
+          </div>
         </div>
-    </section>
-    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
-    <script type="text/javascript">
-        $(".input").focus(function(){
-            $(this).parent().addClass("focus");
-        }).blur(function(){
-            if($(this).val() === ''){
-                $(this).parent().removeClass("focus");
-            }
-        })
-    </script>
+
+          <!-- New Section for Approved and Not Approved -->
+          <div class="status-container" style="margin: 20px auto; max-width: 1200px; background-color: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h3 style="text-align: center; font-weight: bold; margin-bottom: 20px; background-color: #ffffff; padding: 10px; border-radius: 8px;">
+              About Your Visa Application Result
+            </h3>
+          
+            <div style="display: flex; justify-content: center; gap: 20px; align-items: stretch; padding: 20px;">
+              <!-- Visa Approved Section -->
+              <div style="flex: 1; background-color: #d4edda; border: 1px solid #c3e6cb; padding: 20px; border-radius: 8px; box-sizing: border-box; max-width: 45%;">
+                <h4 style="text-align: center;">Visa Approved</h4>
+                <p><strong>Congratulations! 🎉</strong> Your profile has a high potential for visa approval.</p>
+                <div style="background-color: #ffffff; border: 1px solid #cccccc; padding: 15px; border-radius: 8px;">
+                  <p><strong>Next steps for a smooth process:</strong></p>
+                  <ul>
+                    <li>Prepare required documentation (passport, educational certificates).</li>
+                    <li>Schedule your interview and practice professional responses.</li>
+                    <li>Organize financial documents to prove sufficient funds.</li>
+                  </ul>
+                </div>
+              </div>
+          
+              <!-- Visa Not Approved Section -->
+              <div style="flex: 1; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 20px; border-radius: 8px; box-sizing: border-box; max-width: 45%;">
+                <h4 style="text-align: center;">Visa Not Approved</h4>
+                <p><strong>Unfortunately, your profile doesn’t meet the current requirements.</strong></p>
+                <div style="background-color: #ffffff; border: 1px solid #cccccc; padding: 15px; border-radius: 8px;">
+                  <p><strong>Suggestions for improvement:</strong></p>
+                  <ul>
+                    <li>Review eligibility criteria and fill any gaps.</li>
+                    <li>Seek expert guidance to strengthen your application.</li>
+                    <li>Gather additional supporting evidence.</li>
+                  </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </body>
 </html>

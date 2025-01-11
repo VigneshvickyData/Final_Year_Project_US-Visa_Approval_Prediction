@@ -57,10 +57,18 @@ class DataForm:
         self.full_time_position = form.get("full_time_position")
 
 @app.get("/", tags=["authentication"])
-async def index(request: Request):
-
+async def intro(request: Request):
+    # Render the introduction page
     return templates.TemplateResponse(
-            "usvisa.html",{"request": request, "context": "Rendering"})
+        "intro.html", {"request": request}
+    )
+
+@app.get("/usvisa", tags=["authentication"])
+async def index(request: Request):
+    # Render the US Visa page
+    return templates.TemplateResponse(
+        "usvisa.html", {"request": request, "context": "Rendering"}
+    )
 
 
 @app.get("/train")
@@ -103,9 +111,9 @@ async def predictRouteClient(request: Request):
 
         status = None
         if value == 1:
-            status = "Visa-approved"
+            status = "Visa-approved "
         else:
-            status = "Visa Not-Approved"
+            status = "Visa Not-Approved "
 
         return templates.TemplateResponse(
             "usvisa.html",
