@@ -105,11 +105,13 @@ export AWS_SECRET_ACCESS_KEY=<AWS_SECRET_ACCESS_KEY>
 
 
 ## Screenshot
-### Prediction Page
-![App Screenshot](https://github.com/VigneshvickyData/Data_Branching/blob/main/us1.png?raw=true)
+### Visa-approved
+![App Screenshot](https://github.com/VigneshvickyData/Data_Branching/blob/main/ap1.png?raw=true)
 
-![App Screenshot](https://github.com/VigneshvickyData/Data_Branching/blob/main/us2.png?raw=true)
+![App Screenshot](https://github.com/VigneshvickyData/Data_Branching/blob/main/ap2.png?raw=true)
 
 ## Screenshot
-### Result Page
-![App Screenshot](https://github.com/VigneshvickyData/Data_Branching/blob/main/u3.png?raw=true)
+### Visa Not-Approved 
+![App Screenshot](https://github.com/VigneshvickyData/Data_Branching/blob/main/ap%20no.png?raw=true)
+
+![App Screenshot](https://github.com/VigneshvickyData/Data_Branching/blob/main/ap%20no1.png?raw=true)
